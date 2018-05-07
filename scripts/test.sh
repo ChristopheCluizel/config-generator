@@ -9,11 +9,12 @@ Test the app
 
 Usage:
 
-    $0 aws_region aws_profile
+    $0 aws_region aws_profile build
 
 Options:
     aws_region      the AWS region used fot the Parameter Store
     aws_profile     the AWS profile used for the Parameter Store
+    build           (optional) if we want to build the image
 
 Example:
 
@@ -47,6 +48,10 @@ echo "AWS_REGION=""$AWS_REGION" > "$ENV_FILE"
 echo "AWS_ACCESS_KEY_ID=""$AWS_ACCESS_KEY_ID" >> "$ENV_FILE"
 echo "AWS_SECRET_ACCESS_KEY=""$AWS_SECRET_ACCESS_KEY" >> "$ENV_FILE"
 
-docker-compose -f docker-compose.test.yml up --build
+if [ ! -z "$3" ] && [ "$3" == "build" ]; then
+    docker-compose -f docker-compose.test.yml up --build
+else
+    docker-compose -f docker-compose.test.yml up
+fi
 
 rm .env

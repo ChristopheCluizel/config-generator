@@ -17,13 +17,6 @@ The container will be run in attached mode to be able to directly see the result
 ```bash
 ./scripts/test.sh --help
 ```
-If you want to run tests again without rebuilding the image and start a new container, you can connect
-to the attached container and run the tests from inside the container. No building is necessary because
-of a mounting point. Therefore you can change your code and directly run the tests.
-```bash
-docker exec -it config_generator_test /bin/bash
-python -m unittest2 discover -v -s tests
-```
 
 ## How to linter
 ```bash
