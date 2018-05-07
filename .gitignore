@@ -1,0 +1,5 @@
+.idea
+config_generator.iml
+*.pyc
+venv3
+.env

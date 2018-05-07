@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      - AWS_REGION
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+    image: config_generator_test
+    container_name: config_generator_test
+    command: bash -c "python -m unittest2 discover -v -s tests && tail -f /dev/null"
+    volumes:
+      - .:/app

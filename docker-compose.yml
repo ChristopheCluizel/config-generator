@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      - AWS_REGION
+    image: config_generator_app
+    container_name: config_generator_app
+    ports:
+      - "8000:8000"
