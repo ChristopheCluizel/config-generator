@@ -8,6 +8,6 @@ services:
       - AWS_SECRET_ACCESS_KEY
     image: config_generator_test
     container_name: config_generator_test
-    command: bash -c "python -m unittest2 discover -v -s tests"
+    command: bash -c "python -m pytest --last-failed"
     volumes:
       - .:/app
