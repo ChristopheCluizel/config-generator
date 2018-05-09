@@ -1,7 +1,13 @@
-sudo: required
-services:
-  - docker
-language: generic
+jobs:
+  include:
+    - stage: test
+      sudo: required
+      services:
+        - docker
+      language: generic
 
-script:
-  - docker-compose -f docker-compose.test.yml up --build --exit-code-from app
+      script:
+        - docker-compose -f docker-compose.test.yml up --build --exit-code-from app
+stages:
+  - name: test
+    if: branch = master OR branch = develop OR type = pull_request
