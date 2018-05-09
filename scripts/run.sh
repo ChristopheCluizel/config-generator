@@ -8,7 +8,7 @@ function usage() {
 Usage: $0 [arguments]
     -h, --help                            display this help message
     -e, --env           <ENV>             environment to select the configuration (prod, dev)
-    --aws-region        <AWS_REGION>      the AWS region used fot the Parameter Store
+    --aws-region        <AWS_REGION>      the AWS region used for the Parameter Store
     --aws-profile       <AWS_PROFILE>     [OPTIONAL] only for dev mode - the AWS profile used for the Parameter Store
 
 Example:
@@ -64,6 +64,11 @@ done
 check_argument "env" "${ENV}"
 check_argument "aws-region" "${AWS_REGION}"
 
+# fill the .env file to pass variable to the container
+ENV_FILE=".env"
+
+echo "AWS_REGION=""$AWS_REGION" > "$ENV_FILE"
+
 if [ "$ENV" = "prod" ]; then
     docker-compose -f docker-compose.yml up -d --build
 elif [ "$ENV" = "dev" ]; then
@@ -73,10 +78,6 @@ elif [ "$ENV" = "dev" ]; then
     AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id --profile "$AWS_PROFILE")
     AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key --profile "$AWS_PROFILE")
 
-    # fill the .env file to pass variable to the container
-    ENV_FILE=".env"
-
-    echo "AWS_REGION=""$AWS_REGION" > "$ENV_FILE"
     echo "AWS_ACCESS_KEY_ID=""$AWS_ACCESS_KEY_ID" >> "$ENV_FILE"
     echo "AWS_SECRET_ACCESS_KEY=""$AWS_SECRET_ACCESS_KEY" >> "$ENV_FILE"
 
