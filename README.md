@@ -1,6 +1,14 @@
 Config Generator
 ===
 
+[![Build Status](https://travis-ci.org/ChristopheCluizel/config-generator.svg?branch=master)](https://travis-ci.org/ChristopheCluizel/config-generator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## How to clone the repo
+```bash
+git clone git@github.com:ChristopheCluizel/config-generator.git config_generator
+```
+
 ## How to run
 Run the following command
 ```bash

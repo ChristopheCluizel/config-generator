@@ -3,41 +3,20 @@
 set -e
 
 function usage() {
-    >&2 cat << EOM
-Run the app
---help display this message.
+    echo "Run the application
 
-Usage:
-
-    $0 env aws_region [aws_profile]
-
-Options:
-    env             environment to select the configuration (prod, dev)
-    aws_region      the AWS region used fot the Parameter Store
-    aws_profile     only for dev mode - the AWS profile used for the Parameter Store
+Usage: $0 [arguments]
+    -h, --help                            display this help message
+    -e, --env           <ENV>             environment to select the configuration (prod, dev)
+    --aws-region        <AWS_REGION>      the AWS region used fot the Parameter Store
+    --aws-profile       <AWS_PROFILE>     [OPTIONAL] only for dev mode - the AWS profile used for the Parameter Store
 
 Example:
-
-In this example
-
-    ./run.sh dev eu-west-1 perso
-EOM
-    exit 1
+    ./run.sh --env dev --aws-region eu-west-1 --aws-profile perso
+"
 }
 
-if [ "$1" == "--help" ]; then
-    usage
-fi
-
-# Validate arguments
-if [ ! -z "$1" ] && [ ! -z "$2" ]; then
-    ENV=$1
-    AWS_REGION=$2
-else
-    usage
-fi
-
-#check that we run this script from cj-rocket root folder
+# Check that we run this script from cj-rocket root folder
 CURRENT_DIRECTORY=$( basename "$PWD" )
 
 if [ "$CURRENT_DIRECTORY" != "config_generator" ]; then
@@ -45,15 +24,51 @@ if [ "$CURRENT_DIRECTORY" != "config_generator" ]; then
     exit 1
 fi
 
+# Retrieve project path
+DIR="$( pwd )"
+
+# Load helpers
+source "${DIR}/scripts/functions.sh"
+
+# get input arguments
+while [[ $# -gt 0 ]]; do
+    key="$1"
+
+    case $key in
+        -e|--env)
+        ENV="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        --aws-region)
+        AWS_REGION="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        --aws-profile)
+        AWS_PROFILE="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        -h|--help)
+        usage
+        exit 0
+        ;;
+        *)
+        unknown_argument "$@"
+        ;;
+    esac
+done
+
+# Validate mandatory arguments
+check_argument "env" "${ENV}"
+check_argument "aws-region" "${AWS_REGION}"
+
 if [ "$ENV" = "prod" ]; then
     docker-compose -f docker-compose.yml up -d --build
 elif [ "$ENV" = "dev" ]; then
     # Validate optional arguments for dev mode
-    if [ ! -z "$3" ]; then
-        AWS_PROFILE=$3
-    else
-        usage
-    fi
+    check_argument "aws-profile" "${AWS_PROFILE}"
 
     AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id --profile "$AWS_PROFILE")
     AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key --profile "$AWS_PROFILE")
@@ -70,4 +85,5 @@ elif [ "$ENV" = "dev" ]; then
     rm .env
 else
     echo "Environment is not correct"
+    usage
 fi
