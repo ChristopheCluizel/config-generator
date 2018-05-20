@@ -1,6 +1,13 @@
+# IDE
 .idea
 config_generator.iml
+
+# python
 *.pyc
 .pytest_cache
 venv3
 .env
+
+# ansible
+*.retry
+inventory.ini

@@ -1,0 +1,41 @@
+---
+- name: Deploy & run config-generator service
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update all packages
+      apt:
+        update_cache: yes
+    - name: Install packages to be able to use HTTPS
+      apt: name={{item}} state=present
+      with_items:
+           - apt-transport-https
+           - ca-certificates
+           - curl
+           - software-properties-common
+    - name: Add docker official GPG key
+      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+      args:
+        warn: false
+    - name: Set-up docker stable repo
+      shell: 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"'
+    - name: Update packages to find docker package
+      apt:
+        update_cache: yes
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+    - name: Download Docker-compose
+      shell: "curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
+      args:
+        warn: false
+    - name: chmod +x on docker-compose file
+      file: dest=/usr/local/bin/docker-compose mode=a+x
+    - name: Git clone config-generator repo
+      git:
+        repo: "https://github.com/ChristopheCluizel/config-generator.git"
+        dest: "/home/ubuntu/config_generator"
+    - name: Start config-generator service
+      shell: "cd config_generator && ./scripts/run.sh --env prod --aws-region us-east-1"
