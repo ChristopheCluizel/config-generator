@@ -38,4 +38,4 @@
         repo: "https://github.com/ChristopheCluizel/config-generator.git"
         dest: "/home/ubuntu/config_generator"
     - name: Start config-generator service
-      shell: "cd config_generator && ./scripts/run.sh --env prod --aws-region us-east-1"
+      shell: "cd config_generator && ./scripts/run.sh --env prod --aws-region {{aws_region}}"

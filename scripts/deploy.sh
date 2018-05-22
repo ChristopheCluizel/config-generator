@@ -6,11 +6,12 @@ function usage() {
     echo "Deploy the application to a host machine
 
 Usage: $0 [arguments]
-    -h, --help                      display this help message
-    --host-ip        <HOST_IP>      the public IP of a host machine to deploy
+    -h, --help                          display this help message
+    --host-ip        <HOST_IP>          the public IP of a host machine to deploy
+    --aws-region     <AWS_REGION>       the AWS region used for the Parameter Store
 
 Example:
-    ./deploy.sh --host-ip 192.0.0.1
+    ./deploy.sh --host-ip 192.0.0.1 --aws-region eu-west-1
 "
 }
 
@@ -38,6 +39,11 @@ while [[ $# -gt 0 ]]; do
         shift # past argument
         shift # past value
         ;;
+        --aws-region)
+        AWS_REGION="$2"
+        shift # past argument
+        shift # past value
+        ;;
         -h|--help)
         usage
         exit 0
@@ -50,9 +56,10 @@ done
 
 # Validate mandatory arguments
 check_argument "host-ip" "${HOST_IP}"
+check_argument "aws-region" "${AWS_REGION}"
 
 # Set the remote host IP in the Ansible inventory file
 sed "s/<host_ip>/""$HOST_IP""/g" inventory.ini.template > inventory.ini
 
 # Provide the host machine
-ansible-playbook ansible.yml -i inventory.ini
+ansible-playbook ansible.yml -i inventory.ini --extra-vars "aws_region=""$AWS_REGION"
