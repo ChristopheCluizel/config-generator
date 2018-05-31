@@ -7,7 +7,7 @@ class AppTests(TestCase):
     def test_status(self):
         expected_response = json.dumps({'success': True})
         with app.test_client() as c:
-            response = c.get('/status')
+            response = c.get('/health')
 
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.data.decode("utf-8"), expected_response)

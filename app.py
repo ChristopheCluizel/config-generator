@@ -13,7 +13,7 @@ def home():
     return status()
 
 
-@app.route("/status")
+@app.route("/health")
 def status():
     response = {'success': True}
     return Response(response=json.dumps(response), content_type='application/json', status=200)
