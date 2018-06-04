@@ -11,3 +11,5 @@ venv3
 # ansible
 *.retry
 inventory.ini
+
+resources/schema/*.png

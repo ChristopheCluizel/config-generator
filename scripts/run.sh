@@ -16,7 +16,7 @@ Example:
 "
 }
 
-# Check that we run this script from cj-rocket root folder
+# Check that we run this script from the config_generator root folder
 CURRENT_DIRECTORY=$( basename "$PWD" )
 
 if [ "$CURRENT_DIRECTORY" != "config_generator" ]; then
