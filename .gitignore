@@ -1,6 +1,6 @@
 # IDE
 .idea
-config_generator.iml
+config-generator.iml
 
 # python
 *.pyc
@@ -11,3 +11,5 @@ venv3
 # ansible
 *.retry
 inventory.ini
+
+resources/schema/*.png

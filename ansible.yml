@@ -36,6 +36,6 @@
     - name: Git clone config-generator repo
       git:
         repo: "https://github.com/ChristopheCluizel/config-generator.git"
-        dest: "/home/ubuntu/config_generator"
+        dest: "/home/ubuntu/config-generator"
     - name: Start config-generator service
-      shell: "cd config_generator && ./scripts/run.sh --env prod --aws-region {{aws_region}}"
+      shell: "cd config-generator && ./scripts/run.sh --env prod --aws-region {{aws_region}}"
