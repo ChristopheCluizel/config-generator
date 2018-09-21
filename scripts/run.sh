@@ -16,11 +16,11 @@ Example:
 "
 }
 
-# Check that we run this script from the config_generator root folder
+# Check that we run this script from the config-generator root folder
 CURRENT_DIRECTORY=$( basename "$PWD" )
 
-if [ "$CURRENT_DIRECTORY" != "config_generator" ]; then
-    echo "You must run this script from config_generator root project directory."
+if [ "$CURRENT_DIRECTORY" != "config-generator" ]; then
+    echo "You must run this script from config-generator root project directory."
     exit 1
 fi
 
@@ -28,6 +28,7 @@ fi
 DIR="$( pwd )"
 
 # Load helpers
+# shellcheck source=scripts/functions.sh
 source "${DIR}/scripts/functions.sh"
 
 # get input arguments

@@ -1,6 +1,6 @@
 # IDE
 .idea
-config_generator.iml
+config-generator.iml
 
 # python
 *.pyc
